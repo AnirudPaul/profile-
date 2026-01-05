@@ -1,0 +1,150 @@
+/* Holographic Cards */
+#page3 .research-container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 80px;
+}
+
+.cards-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    max-width: 1400px;
+    width: 90%;
+    z-index: 10;
+}
+
+.holo-card {
+    background: rgba(10, 15, 20, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 25px;
+    width: 300px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.holo-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--primary-neon);
+    box-shadow: 0 0 30px rgba(100, 255, 218, 0.15);
+    background: rgba(10, 15, 20, 0.8);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    color: var(--primary-neon);
+    margin-bottom: 20px;
+}
+
+.holo-card h3 {
+    font-family: var(--font-heading);
+    color: var(--text-main);
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.short-desc {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.tags span {
+    display: inline-block;
+    background: rgba(100, 255, 218, 0.1);
+    color: var(--primary-neon);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: var(--font-code);
+    margin-right: 5px;
+    border: 1px solid rgba(100, 255, 218, 0.2);
+}
+
+.patent-card .card-icon {
+    color: var(--secondary-neon);
+}
+
+.patent-card .tags span {
+    color: var(--secondary-neon);
+    border-color: rgba(189, 147, 249, 0.3);
+    background: rgba(189, 147, 249, 0.1);
+}
+
+.patent-card:hover {
+    border-color: var(--secondary-neon);
+    box-shadow: 0 0 30px rgba(189, 147, 249, 0.15);
+}
+
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-content {
+    background: #111;
+    border: 1px solid var(--primary-neon);
+    width: 600px;
+    max-width: 90%;
+    max-height: 80vh;
+    padding: 40px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 0 50px rgba(100, 255, 218, 0.2);
+    overflow-y: auto;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    color: var(--text-dim);
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: #fff;
+}
+
+#modal-title {
+    font-family: var(--font-heading);
+    color: var(--primary-neon);
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 10px;
+}
+
+#modal-body {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-main);
+    line-height: 1.8;
+}
