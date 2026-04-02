@@ -630,7 +630,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             badgeText: 'Published',
                             tags: ['GRU', 'HRV', 'XAI', 'Multi-Task Learning', 'Wearables'],
                             link: 'https://ieeexplore.ieee.org/document/11269758',
-                            award: 'PROFILE/PAPERS/MHI/Screenshot 2026-03-26 145820.png',
+                            award: 'PROFILE/PAPERS/MHI/Screenshot%202026-03-26%20145820.png',
                             abstract: 'Mental health disorders represent a growing global burden, yet continuous, objective, and personalized monitoring remains limited by self-report bias and sparse clinical interaction. This paper presents the Mental Health Index (MHI), a personalized multi-task deep learning framework designed for real-time and explainable mental well-being assessment using wearable sensor data. The framework fuses multimodal physiological signals — Heart Rate Variability (HRV), Galvanic Skin Response (GSR), and Respiration Rate — with behavioral data through a Gated Recurrent Unit (GRU)-based multi-task architecture that simultaneously performs mood classification and stress regression. A personalization module adapts the shared feature extractor to individual baselines, improving robustness against inter-user physiological variability. The model achieves 93.9% mood classification accuracy with a regression RMSE of 14.49 and MAE of 8.06. SHAP-based post-hoc explainability provides feature-level attributions for each prediction, making the system interpretable to end users and clinicians. The framework is designed to operate on resource-constrained wearable hardware, supporting continuous, non-intrusive mental health monitoring in everyday environments.'
                         }
                     ]
@@ -785,7 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             badgeText: 'Filed',
                             tags: ['Wearable AI', 'Mental Health', 'Multi-Task Learning', 'HRV', 'XAI'],
                             link: null,
-                            reportImg: 'PROFILE/PATENTS/MHI/Screenshot 2026-03-26 144011.png',
+                            reportImg: 'PROFILE/PATENTS/MHI/Screenshot%202026-03-26%20144011.png',
                             abstract: 'This invention describes an AI-enabled smartwatch system for continuous and personalized mental health monitoring through multimodal physiological and behavioral data fusion. The device acquires Heart Rate Variability, Galvanic Skin Response, respiration rate, and behavioral activity data in real time, feeding these into a personalized multi-task deep learning framework running on-device. The system computes an explainable Mental Health Index (MHI) that simultaneously estimates mood state and stress levels, with SHAP-based attributions surfaced to the user for transparency. A personalization module adapts the model to individual physiological baselines, ensuring robustness against inter-user variability without requiring cloud-side retraining. The architecture is designed for energy-efficient wearable deployment, supporting continuous background monitoring with anomaly-triggered alerts for deteriorating mental well-being.'
                         },
                         {
@@ -797,7 +797,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             badgeText: 'Filed',
                             tags: ['IoT', 'Edge-Fog', 'Disaster Management', 'Offline AI', 'Fail-Safe'],
                             link: null,
-                            reportImg: 'PROFILE/PATENTS/Disaster/Screenshot 2026-03-26 144104.png',
+                            reportImg: 'PROFILE/PATENTS/Disaster/Screenshot%202026-03-26%20144104.png',
                             abstract: 'This invention describes a multi-sensor Edge-Fog IoT system designed for proactive disaster detection and resilient emergency management. The architecture pairs an explainable AI model at the Fog layer — capable of classifying eleven disaster event types including Fire, Flood, Earthquake, Gas Leak, and Heatwave — with lightweight deterministic rules at the Edge layer that activate autonomously during network outages or cloud unavailability. This dual-layer design ensures fail-safe operation: safety-critical responses are never gated on connectivity. The system integrates heterogeneous environmental sensors, a real-time web dashboard for situational awareness, and a confidence-based handoff mechanism between Edge and Fog decision modes. The invention is applicable to smart buildings, industrial facilities, and community-scale disaster preparedness infrastructure.'
                         },
                         {
@@ -1565,6 +1565,12 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>`;
 
         document.body.appendChild(cipPanel);
+
+        // Initial state: tab 0 = CHIPPIN' IN (guitar), MIDI controls hidden
+        cipPanel.querySelector('.cip-ctrl-row').style.display = 'none';
+        cipPanel.querySelector('#cip-ttl').textContent = "CHIPPIN' IN";
+        cipPanel.querySelector('#cip-sub').textContent = 'SAMURAI // JOHNNY SILVERHAND';
+
         wireCipPanel();
     }
 
@@ -1577,7 +1583,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cipMinipill.classList.remove('pill-visible');
             setTimeout(()=>cipMinipill.style.display='none',300);
             cipPanel.style.display='flex';
-            requestAnimationFrame(()=>cipPanel.classList.add('cip-visible'));
+            requestAnimationFrame(()=>requestAnimationFrame(()=>cipPanel.classList.add('cip-visible')));
         });
         document.body.appendChild(cipMinipill);
     }
@@ -1592,6 +1598,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 cipMinipill.style.display='flex';
                 requestAnimationFrame(()=>cipMinipill.classList.add('pill-visible'));
             },380);
+        });
+
+        // ── Tab switching ──────────────────────────────────────────────────
+        cipPanel.querySelectorAll('.cip-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const t = parseInt(btn.dataset.t);
+                if (t === cipActiveTrack) return;
+                if (cipPlaying) stopCip();
+                cipActiveTrack = t;
+                cipPanel.querySelectorAll('.cip-tab').forEach(b => b.classList.toggle('active', b === btn));
+
+                const guitar  = cipPanel.querySelector('#cip-guitar');
+                const piano   = cipPanel.querySelector('#cip-piano');
+                const ctrlRow = cipPanel.querySelector('.cip-ctrl-row');
+                const ttl     = cipPanel.querySelector('#cip-ttl');
+                const sub     = cipPanel.querySelector('#cip-sub');
+
+                if (t === 0) {
+                    // CHIPPIN' IN — interactive guitar fretboard
+                    guitar.classList.remove('cip-body-hidden');
+                    piano.classList.add('cip-body-hidden');
+                    ctrlRow.style.display = 'none';
+                    ttl.textContent = "CHIPPIN' IN";
+                    sub.textContent = 'SAMURAI // JOHNNY SILVERHAND';
+                } else {
+                    // I REALLY WANT TO STAY — piano MIDI
+                    guitar.classList.add('cip-body-hidden');
+                    piano.classList.remove('cip-body-hidden');
+                    ctrlRow.style.display = '';
+                    ttl.textContent = 'I REALLY WANT TO STAY';
+                    sub.textContent = 'ROSA WALTON // HALSEY';
+                }
+                resetProgBar();
+            });
         });
 
         // Play / Stop
@@ -1630,13 +1670,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function playCip(){
-        if(!cipMidiCache[0]){
+        if(!cipMidiCache[1]){
             const pb=document.getElementById('cip-playbtn');
             pb.textContent='⟳ LOADING...'; pb.disabled=true;
-            cipMidiCache[0]=loadMIDIFromB64(IRL_B64);
-            if(!cipMidiCache[cipActiveTrack]){pb.textContent='▶ PLAY FROM MIDI';pb.disabled=false;return;}
+            cipMidiCache[1]=loadMIDIFromB64(IRL_B64);
+            if(!cipMidiCache[1]){pb.textContent='▶ PLAY FROM MIDI';pb.disabled=false;return;}
+            pb.textContent='▶ PLAY FROM MIDI'; pb.disabled=false;
         }
-        const notes=midiToNotes(cipMidiCache[0]);
+        const notes=midiToNotes(cipMidiCache[1]);
         if(!notes.length){console.warn('[CIP] No notes parsed from MIDI');return;}
         console.log('[CIP] Notes parsed:',notes.length,'  first:',notes[0],'  last:',notes[notes.length-1]);
 
@@ -1694,7 +1735,8 @@ document.addEventListener('DOMContentLoaded', () => {
             buildCipPanel(); buildCipPill();
             cipPanel.style.display='flex';
             if(cipMinipill)cipMinipill.style.display='none';
-            requestAnimationFrame(()=>cipPanel.classList.add('cip-visible'));
+            // double-rAF: lets browser paint display:flex before CSS transition fires
+            requestAnimationFrame(()=>requestAnimationFrame(()=>cipPanel.classList.add('cip-visible')));
             document.addEventListener('keydown',cipKeyHandler);
         } else {
             if(cipPlaying) stopCip();
