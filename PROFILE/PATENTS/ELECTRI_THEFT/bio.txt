@@ -1,0 +1,4 @@
+Developed a system for real-time detection and localization of electricity theft using sensor-based monitoring and anomaly detection techniques. The system aims to identify illegal electricity consumption and assist energy utilities in monitoring and preventing power theft in real time.
+
+Patent Application No: 202641030651
+Filed and published through Vellore Institute of Technology.
